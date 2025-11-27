@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <title>Tobias Mold</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.25, maximum-scale=1.25">
+
+</head>
+
+<body>
+    <style>
+        body {
+            background-color: antiquewhite;
+            font-family: Arial, sans-serif
+        }
+
+        .menu {
+            background-color: #d6c8a4;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-item {
+            color: #333;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+
+        .menu-item:hover {
+            color: #fff;
+            background-color: #b79f76;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            margin-top: 0;
+        }
+
+
+        #infoPopup:target {
+            display: block;
+        }
+
+        .popup-item {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+
+        .popup-item:hover {
+            color: #b79f76;
+        }
+
+
+        #infoPopup:target~.overlay {
+            display: block;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 500;
+        }
+
+        .footer {
+            background-color: #d6c8a4;
+            padding: 20px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer p {
+            color: #333;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .circle {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #b99232;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .circle:hover {
+            background-color: #9a7a25;
+            transform: scale(1.2);
+        }
+        
+    </style>
+    </head>
+
+    <body>
+        <div class="menu">
+            <a href="MoldWebsite.html" class="menu-item">Startseite</a>
+            <a href="#infoPopup" class="menu-item" id="infoLink">Infos</a>
+            <a href="downloads.html" class="menu-item">Downloads</a>
+        </div>
+
+        <div class="overlay" onclick="location.href='#';"></div>
+
+        <div class="popup" id="infoPopup">
+            <a href="allgemein.html" class="popup-item">Allgemein</a>
+            <a href="feuerwehr.html" class="popup-item">Feuerwehr</a>
+            <a href="buecher.html" class="popup-item">Bücher</a>
+            <a href="videos.html" class="popup-item">Videos</a>
+            <a href="impressum.html" class="popup-item">Impressum</a>
+            <a href="#" class="popup-item"
+                style="color: hsla(26, 80%, 62%, 0.604); font-size: 0.8em; font-weight: bold; ">Schließen</a>
+        </div>
+
+        <h1>Tobias Mold</h1>
+        <div class="textbox">
+            <p>Tobias Michael Mold wurde am <b>24. November 2010</b> in Krems an der Donau geboren. Er hat eine jüngere
+                Schwester namens Lia, welche 2013 geboren wurde. Tobi ist ein sehr kreativer
+                Mensch und liebt es, sich Geschichten auszudenken.
+            <h3>Bücher</h3> Als kleiner Junge interessierte er sich sehr für das Erdmittelalter und Saurier. Seine
+            Großmutter zeigte ihn oft Sachbücher mit diesen Lebewesen und mit acht Jahren kam ihn die Idee, einen
+            eigenen Sci-Fi Roman mit Sauriern und Genetik zu schreiben. Im September 2025 veröffentlichte er dann sein
+            <b>erstes Buch</b> "Lost World - Der Code des Lebens".
+
+            <h3>Videos und Schauspiel</h3>Tobias interessiert sich sehr für Film und Regie. Sein Traumberuf (stand 2025)
+            ist Regisseur.
+            In seiner Freizeit schneidet er gerne <b>Videos</b> für die TikTok, Facebook und Instagram - Seiten seiner
+            Feuerwehrn. Er ist Mitglied der FF Langenlois und der FF Grafenegg. Während seiner Zeit in der Mittelschule,
+            stand Tobi gelegentlich <b>auf der Bühne</b>.
+            Bei dem Theaterstück "Die Kreative Hausübung", hatte er eine Doppelrolle. Im ersten Teil des Stücks
+            verkörperte er einen Polizisten und im zweiten einen Barkeeper. Beides Hauptrollen.
+            </p>
+        </div>
+        <div class="footer">
+            <p>© 2025 Tobias Mold</p>
+        </div>
+        <div class="circle" onclick="window.location.href='Foto1.png'">👌</div>
+
+    </body>
+
+</html>
