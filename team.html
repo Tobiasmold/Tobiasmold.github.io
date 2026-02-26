@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Mold - Meet The Team</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: "Lato", sans-serif;
+            background-color: #232323;
+        }
+
+        .header {
+            background-color: #111111;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 16px;
+        }
+
+        .column {
+            flex: 1 0 30%;
+            margin: 16px;
+            max-width: 30%;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #7c7c7c;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        .title {
+            color: rgb(45, 45, 45);
+        }
+
+        .button {
+            border: none;
+            outline: 0;
+            display: inline-block;
+            padding: 8px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: rgb(45, 45, 45);
+        }
+
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 3;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        #menuBtn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+            z-index: 2;
+        }
+
+        @media screen and (max-width: 650px) {
+            .column {
+                flex: 1 0 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">Team</div>
+
+<div class="row">
+    <div class="column">
+        <div class="card">
+            <img src="profile.jpg" alt="Tobias Mold">
+            <div class="container">
+                <h2>Tobias Mold (TM)</h2>
+                <p class="title">Author, Actor, Director</p>
+                <p>He is the founder of Mold-productions.</p>
+                <p>tobias.mold@gmx.at</p>
+                <p><button class="button">Contact</button></p>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="homepage.html">Homepage</a>
+    <a href="tm.html">Mold</a>
+    <a href="buecher.html">Bücher</a>
+    <a href="kontakt.html">Kontakt</a>
+
+</div>
+
+<span id="menuBtn" onclick="openNav()">&#9776; </span>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+</script>
+</body>
+</html>
