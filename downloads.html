@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bücher</title>
-<style>
+    <title>Downloads</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
         body,
         html {
             height: 100%;
@@ -21,11 +22,39 @@
         }
 
         .text {
-            text-align: justify;
+            text-align: left;
             color: #f1f1f1;
             left: 20px;
             right: 20px;
             position: absolute;
+        }
+
+        .download-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+
+        }
+
+        .btn {
+            background-color: #3c3c3c;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #535353;
+            transform: scale(1.05);
+        }
+
+        .btn i {
+            margin-right: 5px;
         }
 
         .header {
@@ -35,12 +64,6 @@
             text-align: center;
             font-size: 24px;
             font-weight: bold;
-        }
-
-        .content {
-            padding: 20px;
-            color: rgb(227, 227, 227);
-            text-align: center;
         }
 
         .sidenav {
@@ -106,43 +129,24 @@
 <body>
 
     <div class="bg">
-        <div class="header">Bücher</div>
+        <div class="header">Downloads</div>
         <div class="text">
-            <h3>Der Anfang</h3>
-            <p>Tobias Mold interessierte sich schon im jungen Alter sehr für das Erdmittelalter.
-                Seine Großmutter unterstützte diese Neugier, indem sie ihm regelmäßig Bücher über diese
-                faszinierenden Zeit, und ihre Bewohner, zeigte. Inspiriert von seinem Interesse entwickelte Tobias im Alter von 8
-                Jahren die Idee, einen eigenen Sci-Fi-Roman zu schreiben, der Saurier und genetische Themen behandelt.
-            </p>
-            <br>
-            <h3>Die Geschichte</h3>
-            <p>Tobi ist ein junger Autor, der im Alter von 8 Jahren sein Buch "LOST WORLD - DER
-                CODE DES LEBENS" geschrieben hat. Die Geschichte folgt dem Paläogenetiker Dr. Tyler Steele, der für
-                die Firma TerraGen Innovations arbeitet, die ausgestorbene Arten klont. Als das rivalisierende
-                Unternehmen Apex BioSystems einen Überfall plant, wird Steele in ein gefährliches Abenteuer verwickelt.
-                Mit seinem Team, darunter Dr. Emma Rivera und Tycho Mold, muss er nach einem Flugzeugabsturz in einem
-                gefährlichen Dschungel überleben und gegen die Bedrohungen kämpfen. Der Roman verbindet spannende
-                Abenteuer
-                mit ethischen Fragen zur Gentechnologie.</p>
-            <br>
-            <h3>Das Buch</h3>
-            <ul>
-                <li><b>Genre:</b> Sci-Fi Roman</li>
-                <li><b>Altersempfehlung:</b> Ab 15 Jahren</li>
-                <li><b>Seitenanzahl:</b> 316 Seiten</li>
-                <li><b>Ort:</b> Fiktive Welt mit eigenen Kontinenten und Ländern</li>
-                <li><b>Drucken:</b> Gedruckt über BoD (Books on Demand)</li>
-            </ul>
-    
+            <div class="download-item">
+                <span>Zusammenfassung "Lost World - Der Code des Lebens"</span>
+                <a href="lost_world1.pdf" download><button class="btn"><i class="fa fa-download"></i> Download</button></a>
+            </div>
+            <div class="download-item">
+                <span>Werbefoto "Lost World - Der Code des Lebens"</span>
+                <a href="photo.jpg" download><button class="btn"><i class="fa fa-download"></i> Download</button></a>
+            </div>
         </div>
     </div>
-
 
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.html">Startseite</a>
         <a href="tm.html">Mold</a>
-        <a href="downloads.html">Downloads</a>
+        <a href="buecher.html">Bücher</a>
         <a href="kontakt.html">Kontakt</a>
         <a href="impressum.html">Impressum</a>
     </div>
@@ -158,5 +162,4 @@
         }
     </script>
 </body>
-
 </html>
