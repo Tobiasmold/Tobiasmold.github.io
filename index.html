@@ -11,7 +11,6 @@
             font-family: "Lato", sans-serif;
             background-color: #111;
             zoom: 120%;
-            background: #111;
             background: linear-gradient(0deg, rgba(17, 17, 17, 1) 0%, rgba(0, 0, 0, 1) 93%, rgba(0, 0, 0, 1) 100%);
         }
 
@@ -46,7 +45,6 @@
             text-align: center;
             z-index: 3;
             font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            
         }
 
         .sidenav {
@@ -57,19 +55,46 @@
             top: 0;
             left: 0;
             background-color: #111;
+            overflow-y: auto;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
+            max-height: 100vh;
+        }
+
+        .sidenav input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 0 auto;
+            display: block;
+            font-size: 18px;
+            color: #818181;
+            background-color: #222;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #myMenu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
 
         .sidenav a {
             padding: 8px 8px 8px 32px;
             text-decoration: none;
-            font-size: 25px;
+            font-size: 20px;
             color: #818181;
             display: block;
             transition: 0.3s;
         }
+
 
         .sidenav a:hover {
             color: #f1f1f1;
@@ -104,7 +129,6 @@
 </head>
 <body>
 
-
 <div class="bg">
     <div class="overlay"></div>
     <div class="text-overlay">Mold-productions</div>
@@ -112,11 +136,15 @@
 
 <div class="left" style="background-color:#bbb;"></div>
 <div id="mySidenav" class="sidenav">
-    <input type="text" id="sidenav" onkeyup="myMenuFunction()" placeholder="Search.." title="Type in a category">
+    <div class="search-container">
+        <input type="text" id="sidenav" onkeyup="myMenuFunction()" placeholder="Suche..." title="Wähle eine Seite">
+    </div>
     <ul id="myMenu">
         <li><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></li>
+        <li><a href="index.html">Startseite</a></li>
         <li><a href="tm.html">Mold</a></li>
         <li><a href="buecher.html">Bücher</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
         <li><a href="downloads.html">Downloads</a></li>
         <li><a href="kontakt.html">Kontakt</a></li>
         <li><a href="impressum.html">Impressum</a></li>
@@ -127,29 +155,31 @@
 <p style="padding-top: 60px; color: rgb(157, 157, 157); text-align: center;">tobias.mold@gmx.at</p>
 <script>
     function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-
-    function myMenuFunction() {
-    var input, filter, ul, li, a, i;
-    input = document.getElementById("sidenav");
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myMenu");
-    li = ul.getElementsByTagName("li");
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
+    document.getElementById("mySidenav").style.width = "250px";
+    document.body.style.overflow = "hidden"; // Verhindert das Scrollen des Hauptinhalts
 }
 
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.body.style.overflow = "auto"; // Erlaubt das Scrollen des Hauptinhalts wieder
+}
+
+
+    function myMenuFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("sidenav");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("myMenu");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
 </script>
 </body>
 </html>

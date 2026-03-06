@@ -47,19 +47,45 @@
             height: 100%;
             width: 0;
             position: fixed;
-            z-index: 3;
+            z-index: 4;
             top: 0;
             left: 0;
             background-color: #111;
+            overflow-y: auto;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
+            max-height: 100vh;
+        }
+
+        .sidenav input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 0 auto;
+            display: block;
+            font-size: 18px;
+            color: #818181;
+            background-color: #222;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #myMenu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
 
         .sidenav a {
             padding: 8px 8px 8px 32px;
             text-decoration: none;
-            font-size: 25px;
+            font-size: 20px;
             color: #818181;
             display: block;
             transition: 0.3s;
@@ -108,16 +134,15 @@
     <div class="bg">
         <div class="header">Bücher</div>
         <div class="text">
-            <h3>Der Anfang</h3>
+            <h3>Allgemein</h3>
             <p>Tobias Mold interessierte sich schon im jungen Alter sehr für das Erdmittelalter.
                 Seine Großmutter unterstützte diese Neugier, indem sie ihm regelmäßig Bücher über diese
                 faszinierenden Zeit, und ihre Bewohner, zeigte. Inspiriert von seinem Interesse entwickelte Tobias im Alter von 8
                 Jahren die Idee, einen eigenen Sci-Fi-Roman zu schreiben, der Saurier und genetische Themen behandelt.
             </p>
             <br>
-            <h3>Die Geschichte</h3>
-            <p>Tobi ist ein junger Autor, der im Alter von 8 Jahren sein Buch "LOST WORLD - DER
-                CODE DES LEBENS" geschrieben hat. Die Geschichte folgt dem Paläogenetiker Dr. Tyler Steele, der für
+            <h3>Lost World - Der Code des Lebens</h3>
+            <p>"LOST WORLD - DER CODE DES LEBENS", ist Mold's erstes Buch. Die Geschichte folgt dem Paläogenetiker Dr. Tyler Steele, der für
                 die Firma TerraGen Innovations arbeitet, die ausgestorbene Arten klont. Als das rivalisierende
                 Unternehmen Apex BioSystems einen Überfall plant, wird Steele in ein gefährliches Abenteuer verwickelt.
                 Mit seinem Team, darunter Dr. Emma Rivera und Tycho Mold, muss er nach einem Flugzeugabsturz in einem
@@ -131,6 +156,7 @@
                 <li><b>Altersempfehlung:</b> Ab 15 Jahren</li>
                 <li><b>Seitenanzahl:</b> 316 Seiten</li>
                 <li><b>Ort:</b> Fiktive Welt mit eigenen Kontinenten und Ländern</li>
+                <li><b>Datum:</b> Spielt 2025</li>
                 <li><b>Drucken:</b> Gedruckt über BoD (Books on Demand)</li>
             </ul>
     
@@ -138,14 +164,22 @@
     </div>
 
 
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="index.html">Startseite</a>
-        <a href="tm.html">Mold</a>
-        <a href="downloads.html">Downloads</a>
-        <a href="kontakt.html">Kontakt</a>
-        <a href="impressum.html">Impressum</a>
+<div class="left" style="background-color:#bbb;"></div>
+<div id="mySidenav" class="sidenav">
+    <div class="search-container">
+        <input type="text" id="sidenav" onkeyup="myMenuFunction()" placeholder="Suche..." title="Wähle eine Seite">
     </div>
+    <ul id="myMenu">
+        <li><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></li>
+        <li><a href="index.html">Startseite</a></li>
+        <li><a href="tm.html">Mold</a></li>
+        <li><a href="buecher.html">Bücher</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+        <li><a href="impressum.html">Impressum</a></li>
+    </ul>
+</div>
 
     <span id="menuBtn" onclick="openNav()">&#9776; </span>
     <script>
@@ -155,6 +189,21 @@
 
         function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
+        }
+        function myMenuFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("sidenav");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("myMenu");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
         }
     </script>
 </body>

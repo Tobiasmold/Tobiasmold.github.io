@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Quiz</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: "Lato", sans-serif;
+            background-color: #232323;
+            zoom: 120%;
+        }
+
+        .bg {
+            background-color: #232323;
+            height: 100%;
+            position: relative;
+        }
+
+        .header {
+            background-color: #111111;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            color: rgb(227, 227, 227);
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 4;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            max-height: 100vh;
+        }
+
+        .sidenav input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 0 auto;
+            display: block;
+            font-size: 18px;
+            color: #818181;
+            background-color: #222;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #myMenu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        #menuBtn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+            z-index: 2;
+        }
+
+        .quiz-container {
+            margin: 20px;
+            color: white;
+        }
+
+        .question {
+            font-size: 20px;
+            background-color: #444;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .option {
+            margin: 5px 0;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #f1f1f1;
+        }
+
+        .submit-button {
+            border: none;
+            outline: none;
+            padding: 12px 20px;
+            background-color: #393939; /* Grüner Hintergrund */
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px; /* Abgerundete Ecken */
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s; /* Übergänge für Hintergrund und Transformation */
+        }
+
+        .submit-button:hover {
+            background-color: #4b4b4b; /* Dunklerer Grünton beim Hover */
+            transform: scale(1.05); /* Vergrößert den Button leicht */
+        }
+
+        .submit-button:active {
+            transform: scale(0.95); /* Verkleinert den Button beim Klicken */
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg">
+        <div class="header">Quiz</div>
+        <div class="content">
+            <div class="quiz-container" id="quiz"></div>
+            <button class="submit-button" onclick="submitQuiz()">Quiz abschicken</button>
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <div id="mySidenav" class="sidenav">
+        <div class="search-container">
+            <input type="text" id="sidenav" onkeyup="myMenuFunction()" placeholder="Suche..." title="Wähle eine Seite">
+        </div>
+        <ul id="myMenu">
+            <li><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></li>
+            <li><a href="index.html">Startseite</a></li>
+            <li><a href="tm.html">Mold</a></li>
+            <li><a href="buecher.html">Bücher</a></li>
+            <li><a href="quiz.html">Quiz</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="kontakt.html">Kontakt</a></li>
+            <li><a href="impressum.html">Impressum</a></li>
+        </ul>
+    </div>
+
+    <span id="menuBtn" onclick="openNav()">&#9776; </span>
+
+    <script>
+        const quizQuestions = [
+            {
+                question: "Wieviele Seiten hat Lost World - Der Code des Lebens?",
+                options: ["270", "316", "394", "401"],
+                answer: 1
+            },
+            {
+                question: "Wann wurde die Geschichte geschrieben?",
+                options: ["1983", "1898", "2011", "2018"],
+                answer: 3
+            },
+            {
+                question: "Wer ist der Hauptcharakter?",
+                options: ["Dr. Emma Rivera", "Dr. Tyler Steele", "Tycho Mold", "Tobias Mold"],
+                answer: 1
+            },
+            {
+                question: "Wie heißt die berühmte Firma in dem Buch?",
+                options: ["TerraGen Innovations", "Apex BioSystems", "NeuroTech Industries", "Clonex", "Genetic Solutions"],
+                answer: 0
+            },
+            {
+                question: "Wie lautet die Altersfreigabe?",
+                options: ["10 Jahre", "12 Jahre", "15 Jahre", "18 Jahre"],
+                answer: 2
+            },
+            {
+                question: "Wo spielt die Geschichte?",
+                options: ["USA", "Österreich", "Fiktiver Ort", "Unbekannt"],
+                answer: 2
+            },
+            {
+                question: "Wann spielt die Geschichte?",
+                options: ["1970", "2010", "2025", "2100"],
+                answer: 2
+            }
+        ];
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = quizQuestions.map((q, index) => {
+                const optionsHtml = q.options.map((option, i) => `
+                    <div class="option">
+                        <input type="radio" name="question${index}" value="${i}" id="q${index}o${i}">
+                        <label for="q${index}o${i}">${option}</label>
+                    </div>
+                `).join('');
+                return `<div class="question">${index + 1}. ${q.question}<br>${optionsHtml}</div>`;
+            }).join('');
+        }
+
+        function submitQuiz() {
+            const score = quizQuestions.reduce((acc, q, index) => {
+                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                return acc + (selectedOption && parseInt(selectedOption.value) === q.answer ? 1 : 0);
+            }, 0);
+            const percentage = (score / quizQuestions.length) * 100;
+            document.getElementById('result').innerText = `Du hast ${score} von ${quizQuestions.length} Fragen richtig beantwortet (${percentage.toFixed(2)}%).`;
+        }
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        function myMenuFunction() {
+            const input = document.getElementById("sidenav");
+            const filter = input.value.toUpperCase();
+            const ul = document.getElementById("myMenu");
+            const li = ul.getElementsByTagName("li");
+            Array.from(li).forEach(item => {
+                const a = item.getElementsByTagName("a")[0];
+                item.style.display = a.innerHTML.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            });
+        }
+
+        loadQuiz();
+    </script>
+</body>
+
+</html>

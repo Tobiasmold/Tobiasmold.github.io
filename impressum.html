@@ -49,19 +49,45 @@
             height: 100%;
             width: 0;
             position: fixed;
-            z-index: 3;
+            z-index: 4;
             top: 0;
             left: 0;
             background-color: #111;
+            overflow-y: auto;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
+            max-height: 100vh;
+        }
+
+        .sidenav input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 0 auto;
+            display: block;
+            font-size: 18px;
+            color: #818181;
+            background-color: #222;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #myMenu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
 
         .sidenav a {
             padding: 8px 8px 8px 32px;
             text-decoration: none;
-            font-size: 25px;
+            font-size: 20px;
             color: #818181;
             display: block;
             transition: 0.3s;
@@ -108,7 +134,7 @@
 <body>
 
     <div class="bg">
-    <div class="header">Mold</div>
+    <div class="header">Impressum</div>
     <div class="text">
         <p><b><h4>Angaben gemäß E-Commerce-Gesetz (ECG):</h4></b></p>
             <p><b>Name:</b> Tobias Michael Mold</p>
@@ -123,14 +149,22 @@
 
 
 
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="index.html">Startseite</a>
-        <a href="tm.html">Mold</a>
-        <a href="buecher.html">Bücher</a>
-        <a href="downloads.html">Downloads</a>
-        <a href="kontakt.html">Kontakt</a>
+<div class="left" style="background-color:#bbb;"></div>
+<div id="mySidenav" class="sidenav">
+    <div class="search-container">
+        <input type="text" id="sidenav" onkeyup="myMenuFunction()" placeholder="Suche..." title="Wähle eine Seite">
     </div>
+    <ul id="myMenu">
+        <li><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></li>
+        <li><a href="index.html">Startseite</a></li>
+        <li><a href="tm.html">Mold</a></li>
+        <li><a href="buecher.html">Bücher</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+        <li><a href="downloads.html">Downloads</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+        <li><a href="impressum.html">Impressum</a></li>
+    </ul>
+</div>
 
     <span id="menuBtn" onclick="openNav()">&#9776; </span>
     <script>
@@ -140,6 +174,21 @@
 
         function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
+        }
+        function myMenuFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("sidenav");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("myMenu");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
         }
     </script>
 </body>
