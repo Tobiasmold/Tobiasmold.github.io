@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewerbung</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: "Lato", sans-serif;
+            background-color: #232323;
+            zoom: 120%;
+        }
+
+        .bg {
+            background-color: #232323;
+            height: 100%;
+            position: relative;
+        }
+
+        .text {
+            text-align: justify;
+            color: #f1f1f1;
+            left: 20px;
+            right: 20px;
+            position: absolute;
+        }
+
+        .header {
+            background-color: #111111;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .form-container {
+            padding: 20px;
+            color: rgb(227, 227, 227);
+            max-width: 600px;
+            margin: auto;
+            background-color: #333;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .form-container label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444;
+            color: #fff;
+        }
+
+        .form-container input[type="submit"],
+        .form-container input[type="reset"] {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #555;
+            color: white;
+        }
+
+        .form-container input[type="submit"]:hover,
+        .form-container input[type="reset"]:hover {
+            background-color: #777;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 4;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            max-height: 100vh;
+        }
+
+        .sidenav input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 0 auto;
+            display: block;
+            font-size: 18px;
+            color: #818181;
+            background-color: #222;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #myMenu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 17px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        #menuBtn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+            z-index: 2;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 14px;
+            }
+
+            .text {
+                font-size: 2px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="bg">
+        <div class="header">Bewerbung</div>
+
+        <div class="form-container">
+            <h4 style="text-align: justify;">Hier können Sie sich bei Mold Productions bewerben. 
+                Bitte füllen Sie das folgende Formular aus und senden 
+                Sie es ab. Wir freuen uns auf Ihre Bewerbung!</h4>
+            <form id="applicationForm" method="post" enctype="multipart/form-data">
+                <div>
+                    <label for="firstname">Vorname:</label>
+                    <input type="text" id="firstname" name="firstname" required/>
+                </div>
+
+                <div>
+                    <label for="lastname">Nachname:</label>
+                    <input type="text" id="lastname" name="lastname" required/>
+                </div>
+
+                <div>
+                    <label for="job">Gewünschte Stelle:</label>
+                    <input type="text" id="job" name="job" required/>
+                </div>
+
+                <div>
+                    <label for="email">E-Mail:</label>
+                    <input type="email" id="email" name="email" required/>
+                </div>
+
+                <div>
+                    <label for="tel">Telefon-Nummer:</label>
+                    <input type="tel" id="tel" name="tel" required/>
+                </div>
+
+                <div>
+                    <input type="submit" value="Absenden"/>
+                    <input type="reset" value="Zurücksetzen"/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="mySidenav" class="sidenav">
+        <div class="search-container">
+            <input type="text" id="sidenav" onkeyup="myMenuFunction()" placeholder="Suche..." title="Wähle eine Seite">
+        </div>
+        <ul id="myMenu">
+            <li><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></li>
+            <li><a href="index.html">Startseite</a></li>
+            <li><a href="tm.html">Mold</a></li>
+            <li><a href="buecher.html">Bücher</a></li>
+            <li><a href="quiz.html">Quiz</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="application.html">Bewerbung</a></li>
+            <li><a href="kontakt.html">Kontakt</a></li>
+            <li><a href="impressum.html">Impressum</a></li>
+        </ul>
+    </div>
+
+    <span id="menuBtn" onclick="openNav()">&#9776; </span>
+    <script>
+        document.getElementById("applicationForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+
+            const formData = {
+                firstname: document.getElementById("firstname").value,
+                lastname: document.getElementById("lastname").value,
+                job: document.getElementById("job").value,
+                email: document.getElementById("email").value,
+                tel: document.getElementById("tel").value
+            };
+
+            // Daten im localStorage speichern
+            localStorage.setItem("applicationData", JSON.stringify(formData));
+
+            // Formular zurücksetzen
+            document.getElementById("applicationForm").reset();
+        });
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        function myMenuFunction() {
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("sidenav");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myMenu");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
