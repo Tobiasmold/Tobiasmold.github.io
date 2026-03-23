@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewerbung Übersicht</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: "Lato", sans-serif;
+            background-color: #232323;
+            zoom: 120%;
+        }
+
+        .header {
+            background-color: #111111;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .application-card {
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            color: #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .back-button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .applications-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Bewerbung Übersicht</div>
+    <div class="applications-container">
+        <div id="applicationsContainer"></div>
+        <button class="back-button" onclick="window.location.href='application.html'">Zurück zum Formular</button>
+    </div>
+
+    <script>
+        function displayApplications() {
+            const applications = JSON.parse(localStorage.getItem("applications")) || [];
+            const applicationsContainer = document.getElementById("applicationsContainer");
+            applicationsContainer.innerHTML = "";
+
+            applications.forEach((app, index) => {
+                const card = document.createElement("div");
+                card.className = "application-card";
+                card.innerHTML = `
+                    <div>
+                        <p><strong>Vorname:</strong> ${app.firstname}</p>
+                        <p><strong>Nachname:</strong> ${app.lastname}</p>
+                        <p><strong>Gewünschte Stelle:</strong> ${app.job}</p>
+                        <p><strong>E-Mail:</strong> ${app.email}</p>
+                        <p><strong>Telefon:</strong> ${app.tel}</p>
+                    </div>
+                    <button class="delete-button" onclick="deleteApplication(${index})">Löschen</button>
+                `;
+                applicationsContainer.appendChild(card);
+            });
+        }
+
+        function deleteApplication(index) {
+            let applications = JSON.parse(localStorage.getItem("applications")) || [];
+            applications.splice(index, 1);
+            localStorage.setItem("applications", JSON.stringify(applications));
+            displayApplications();
+        }
+
+        // Anzeigen der Bewerbungen beim Laden der Seite
+        window.onload = displayApplications;
+    </script>
+
+</body>
+</html>

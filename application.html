@@ -172,9 +172,8 @@
         <div class="header">Bewerbung</div>
 
         <div class="form-container">
-            <h4 style="text-align: justify;">Hier können Sie sich bei Mold Productions bewerben. 
-                Bitte füllen Sie das folgende Formular aus und senden 
-                Sie es ab. Wir freuen uns auf Ihre Bewerbung!</h4>
+            <h4 style="text-align: justify;">Füllen Sie entweder das folgende Formular aus oder 
+                senden Sie uns eine E-Mail unter tobias.mold@gmx.at. Wir freuen uns auf Ihre Bewerbung!</h4>
             <form id="applicationForm" method="post" enctype="multipart/form-data">
                 <div>
                     <label for="firstname">Vorname:</label>
@@ -190,7 +189,6 @@
                     <label for="job">Gewünschte Stelle:</label>
                     <input type="text" id="job" name="job" required/>
                 </div>
-
                 <div>
                     <label for="email">E-Mail:</label>
                     <input type="email" id="email" name="email" required/>
@@ -222,6 +220,7 @@
             <li><a href="downloads.html">Downloads</a></li>
             <li><a href="application.html">Bewerbung</a></li>
             <li><a href="kontakt.html">Kontakt</a></li>
+            <li><a href="impressum.html">Im
             <li><a href="impressum.html">Impressum</a></li>
         </ul>
     </div>
@@ -230,7 +229,6 @@
     <script>
         document.getElementById("applicationForm").addEventListener("submit", function(event) {
             event.preventDefault();
-
 
             const formData = {
                 firstname: document.getElementById("firstname").value,
@@ -241,10 +239,15 @@
             };
 
             // Daten im localStorage speichern
-            localStorage.setItem("applicationData", JSON.stringify(formData));
+            let applications = JSON.parse(localStorage.getItem("applications")) || [];
+            applications.push(formData);
+            localStorage.setItem("applications", JSON.stringify(applications));
 
             // Formular zurücksetzen
             document.getElementById("applicationForm").reset();
+
+            // Weiterleitung zur overview.html
+            window.location.href = "overview.html";
         });
 
         function openNav() {
