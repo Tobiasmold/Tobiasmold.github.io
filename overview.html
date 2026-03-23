@@ -80,6 +80,9 @@
                 card.className = "application-card";
                 card.innerHTML = `
                     <div>
+                        <h4 style="text-align: justify; margin-top: 0;">
+                            Senden Sie uns nun eine E-Mail mit einem Screenshot dieser Seite an <a href="mailto:tobias.mold@gmx.at" style="color: #81d4fa;">tobias.mold@gmx.at</a>
+                        </h4>
                         <p><strong>Vorname:</strong> ${app.firstname}</p>
                         <p><strong>Nachname:</strong> ${app.lastname}</p>
                         <p><strong>Gewünschte Stelle:</strong> ${app.job}</p>
@@ -99,7 +102,6 @@
             displayApplications();
         }
 
-        // Anzeigen der Bewerbungen beim Laden der Seite
         window.onload = displayApplications;
     </script>
 
