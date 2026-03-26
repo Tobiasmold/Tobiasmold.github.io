@@ -150,6 +150,31 @@
             transform: scale(0.95);
         }
 
+        .option label { 
+            display: inline-block; 
+            padding: 6px 8px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+        }
+        .correct-label { 
+            background-color: rgba(76,175,80,0.18); 
+            color: #aeeaa6; 
+            font-weight: 700; 
+        }
+        .incorrect-label { 
+            background-color: rgba(244,67,54,0.12); 
+            color: #ffb3b3; 
+            text-decoration: line-through; 
+        }
+        .feedback { 
+            margin-top: 8px; 
+            font-size: 14px; 
+            color: #ddd; 
+        }
+
+
+
+
         @media screen and (max-height: 450px) {
             .sidenav {
                 padding-top: 15px;
@@ -334,30 +359,55 @@
                 options: ["Wie viele Kilogramm muss er abnehmen, um dem Schönheitsideal gerecht zu werden?", "Was ist der Preis für das Leben?", "Wie geht der Satz des Phytagoras?", "Sind seine Taten menschlich?", "Was hat das Leben für einen Sinn?"],
                 answer: 1
             },
-            
+
         ];
 
         function loadQuiz() {
             const quizContainer = document.getElementById('quiz');
             quizContainer.innerHTML = quizQuestions.map((q, index) => {
-                const optionsHtml = q.options.map((option, i) => `
-                    <div class="option">
-                        <input type="radio" name="question${index}" value="${i}" id="q${index}o${i}">
-                        <label for="q${index}o${i}">${option}</label>
-                    </div>
-                `).join('');
-                return `<div class="question">${index + 1}. ${q.question}<br>${optionsHtml}</div>`;
-            }).join('');
-        }
+            const optionsHtml = q.options.map((option, i) => `
+                <div class="option">
+                    <input type="radio" name="question${index}" value="${i}" id="q${index}o${i}">
+                    <label for="q${index}o${i}">${option}</label>
+                </div>
+            `).join('');
+            return `<div class="question">${index + 1}. ${q.question}<br>${optionsHtml}<div class="feedback" id="feedback${index}"></div></div>`;
+        }).join('');
+    }
 
         function submitQuiz() {
-            const score = quizQuestions.reduce((acc, q, index) => {
-                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
-                return acc + (selectedOption && parseInt(selectedOption.value) === q.answer ? 1 : 0);
-            }, 0);
-            const percentage = (score / quizQuestions.length) * 100;
-            document.getElementById('result').innerText = `Du hast ${score} von ${quizQuestions.length} Fragen richtig beantwortet (${percentage.toFixed(2)}%).`;
+            let score = 0;
+            quizQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="question${index}"]:checked`);
+            const correctInput = document.getElementById(`q${index}o${q.answer}`);
+            const correctLabel = document.querySelector(`label[for="q${index}o${q.answer}"]`);
+
+        // Markiere die richtige Antwort
+        if (correctLabel) correctLabel.classList.add('correct-label');
+
+        // Überprüfen, ob eine Antwort ausgewählt wurde
+        if (selected) {
+            const selectedLabel = document.querySelector(`label[for="${selected.id}"]`);
+            if (selected.value == q.answer) {
+                score++;
+            } else {
+                selectedLabel.classList.add('incorrect-label');
+                // Markiere die falsche Antwort
+                if (selectedLabel) selectedLabel.classList.add('incorrect-label');
+            }
         }
+
+        // Feedback für jede Frage anzeigen
+        const feedbackContainer = document.getElementById(`feedback${index}`);
+        feedbackContainer.innerText = selected && selected.value == q.answer 
+            ? 'Richtig!' 
+            : `Falsch! Die richtige Antwort ist: ${q.options[q.answer]}`;
+    });
+
+    // Gesamter Punktestand anzeigen
+    alert(`Du hast ${score} von ${quizQuestions.length} Punkten erreicht!`);
+    }
+
 
         function openNav() {
             document.getElementById("mySidenav").style.width = "250px";
