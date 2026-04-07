@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Joly — Spiel</title>
+<style>
+  :root{font-family: "Segoe UI", Roboto, Arial, sans-serif; --bg:#fff9f0; --card:#fff; --accent:#ff8a65; --text:#333;}
+  body{zoom: 110%;margin:0;background:linear-gradient(180deg,#fffaf2,var(--bg));color:var(--text);display:flex;justify-content:center;padding:20px;}
+  .wrap{width:100%;max-width:760px;}
+  header{text-align:center;margin-bottom:12px;}
+  h1{margin:0;font-size:26px;}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0;}
+  button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:var(--accent);color:white;font-size:15px;}
+  .secondary{background:#6c757d;}
+  .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);margin-bottom:12px;}
+  .player-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f0f0f0;}
+  .emoji{font-size:28px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#fff3ea;border:1px solid #ffe1cf;}
+  .name{font-weight:600;}
+  select{padding:8px;border-radius:8px;border:1px solid #e6e6e6;}
+  table{width:100%;border-collapse:collapse;margin-top:8px;}
+  th,td{padding:8px;text-align:left;border-bottom:1px solid #f4f4f4;}
+  .small{font-size:13px;color:#666}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Joly</h1>
+      <div class="small">Gib für jeden Spieler die Platzierung der Runde ein.</div>
+    </header>
+
+    <div class="bar">
+      <button id="backBtn" class="secondary" onclick="location.href='joly.html'">Zurück</button>
+      <button id="saveRoundBtn">Runde speichern</button>
+      <button id="clearRoundsBtn" class="secondary">Alle Runden löschen</button>
+    </div>
+
+    <div id="playersArea" class="card"></div>
+
+    <div class="card">
+      <div style="font-weight:600;margin-bottom:8px;">Aktuelle Rangliste</div>
+      <div id="rankingArea"></div>
+    </div>
+
+    <div class="small" style="text-align:center;margin-top:8px;">Hinweis: Spieler werden aus der Startseite geladen und hier wiederverwendet. Runden und Rangliste werden gespeichert.</div>
+  </div>
+
+<script>
+(function(){
+  const PLAYERS_KEY = 'joly_players_v1';
+  const ROUNDS_KEY = 'joly_rounds_v1';
+
+  const playersArea = document.getElementById('playersArea');
+  const rankingArea = document.getElementById('rankingArea');
+  const saveRoundBtn = document.getElementById('saveRoundBtn');
+  const clearRoundsBtn = document.getElementById('clearRoundsBtn');
+
+  function loadPlayers(){
+    try{ const raw = localStorage.getItem(PLAYERS_KEY); return raw ? JSON.parse(raw) : []; }catch(e){ return []; }
+  }
+  function loadRounds(){
+    try{ const raw = localStorage.getItem(ROUNDS_KEY); return raw ? JSON.parse(raw) : []; }catch(e){ return []; }
+  }
+  function saveRounds(rounds){ try{ localStorage.setItem(ROUNDS_KEY, JSON.stringify(rounds)); }catch(e){ alert('Speichern fehlgeschlagen'); } }
+
+  function renderPlayers(){
+    const players = loadPlayers();
+    playersArea.innerHTML = '';
+    if(players.length === 0){
+      playersArea.innerHTML = '<div class="small">Keine Spielerinnen gefunden. Bitte zuerst auf der Startseite Spieler anlegen.</div>';
+      return;
+    }
+    const info = document.createElement('div');
+    info.style.fontWeight = '600';
+    info.style.marginBottom = '8px';
+    info.textContent = 'Punkte für diese Runde eingeben';
+    playersArea.appendChild(info);
+
+    // for each player add a row with a select 1..N
+    players.forEach(p=>{
+      const row = document.createElement('div');
+      row.className = 'player-row';
+      row.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;flex:1">
+          <div class="emoji">${p.emoji}</div>
+          <div>
+            <div class="name">${escapeHtml(p.name)}</div>
+          </div>
+        </div>
+        <div>
+          <select data-id="${p.id}" aria-label="Platz für ${escapeHtml(p.name)}">
+            <option value="">—</option>
+          </select>
+        </div>
+      `;
+      playersArea.appendChild(row);
+    });
+
+    // fill selects with options 1..N and attach change handlers
+    const selects = Array.from(playersArea.querySelectorAll('select'));
+    const n = players.length;
+    selects.forEach(s=>{
+      // remove any old options (defensive)
+      while(s.options.length > 0) s.remove(0);
+      const emptyOpt = document.createElement('option'); emptyOpt.value = ''; emptyOpt.textContent = '—';
+      s.appendChild(emptyOpt);
+      for(let i=1;i<=n;i++){
+        const opt = document.createElement('option'); opt.value = String(i); opt.textContent = String(i);
+        s.appendChild(opt);
+      }
+      s.addEventListener('change', updateSelectOptions);
+    });
+
+    // initial update in case values are pre-filled
+    updateSelectOptions();
+  }
+
+  // Ensure each rank can be chosen only once by disabling already-used options in other selects
+  function updateSelectOptions(){
+    const selects = Array.from(playersArea.querySelectorAll('select'));
+    // gather which ranks are selected and how often
+    const selected = new Map();
+    selects.forEach(s => {
+      if(s.value){
+        selected.set(s.value, (selected.get(s.value) ||0) + 1);
+      }
+    });
+
+    // For each select: disable options that are selected by other selects.
+    selects.forEach(s => {
+      const own = s.value; // keep own selection enabled
+      Array.from(s.options).forEach(opt => {
+        if(opt.value === '') { opt.disabled = false; return; }
+        if(opt.value === own){ opt.disabled = false; return; }
+        // disable if selected by any other select
+        // if selected map has this value, it's chosen by someone (count >=1)
+        opt.disabled = selected.has(opt.value);
+      });
+    });
+  }
+
+  function renderRanking(){
+    const players = loadPlayers();
+    const rounds = loadRounds();
+    if(players.length === 0){
+      rankingArea.innerHTML = '<div class="small">Keine Rangliste verfügbar.</div>'; return;
+    }
+    // compute totals: lower is better, sum of positions across rounds
+    const totals = {};
+    players.forEach(p => totals[p.id] = { id: p.id, name: p.name, emoji: p.emoji, sum: 0, played:0 });
+    rounds.forEach(r => {
+      r.scores.forEach(s => {
+        if(totals[s.id]){
+          totals[s.id].sum += Number(s.score);
+          totals[s.id].played += 1;
+        }
+      });
+    });
+    // convert to array and sort
+    const arr = Object.values(totals).map(x=>x);
+    arr.sort((a, b) => {
+      if (a.played === 0 && b.played === 0) return a.name.localeCompare(b.name);
+      if (a.played === 0) return 1;
+      if (b.played === 0) return -1;
+      if (a.sum !== b.sum) return a.sum - b.sum;
+      return a.name.localeCompare(b.name);
+    });
+
+    // render table
+    let html = '<table><thead><tr><th>#</th><th>Spielerin</th><th>Runden</th><th>Punkte</th></tr></thead><tbody>';
+    let rank = 0;
+    let lastSum = null;
+    let displayRank = 0;
+    arr.forEach((p, idx)=>{
+      if(p.played === 0){
+        html += `<tr><td>—</td><td>${escapeHtml(p.emoji)} ${escapeHtml(p.name)}</td><td>0</td><td>—</td></tr>`;
+        return;
+      }
+      rank++;
+      // equal sums receive same displayRank
+      if(lastSum === null || p.sum !== lastSum){ displayRank = rank; lastSum = p.sum; }
+      html += `<tr><td>${displayRank}</td><td>${escapeHtml(p.emoji)} ${escapeHtml(p.name)}</td><td>${p.played}</td><td>${p.sum}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    rankingArea.innerHTML = html;
+  }
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // Save round: validate, store, reset selects and update ranking
+  saveRoundBtn.addEventListener('click', ()=>{
+    const players = loadPlayers();
+    if(players.length === 0){ alert('Keine Spielerinnen vorhanden.'); return; }
+    const selects = Array.from(playersArea.querySelectorAll('select'));
+    const n = players.length;
+    const taken = new Set();
+    const scores = [];
+    for(const s of selects){
+      const id = s.getAttribute('data-id');
+      const val = s.value;
+      if(val === ''){ alert('Bitte für jede Spielerin eine Platzierung wählen.'); return; }
+      if(taken.has(val)){ alert('Die gleiche Platzierung wurde mehrfach gewählt. Bitte gültige Reihenfolge (1..' + n + ').'); return; }
+      taken.add(val);
+      scores.push({ id, score: Number(val) });
+    }
+    // basic validation: must have exactly all ranks 1..n
+    if(taken.size !== n){ alert('Bitte alle Platzierungen einmal verwenden (1..' + n + ').'); return; }
+
+    const rounds = loadRounds();
+    rounds.push({ ts: Date.now(), scores });
+    saveRounds(rounds);
+    alert('Runde gespeichert.');
+    // clear selects for next round and update availability
+    selects.forEach(s => s.value = '');
+    updateSelectOptions();
+    renderRanking();
+  });
+
+  clearRoundsBtn.addEventListener('click', ()=>{
+    if(!confirm('Alle gespeicherten Runden wirklich löschen?')) return;
+    localStorage.removeItem(ROUNDS_KEY);
+    renderRanking();
+  });
+
+  // initial render
+  renderPlayers();
+  renderRanking();
+})();
+</script>
+</body>
+</html>

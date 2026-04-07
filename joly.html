@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Joly</title>
+<style>
+  :root{font-family: "Segoe UI", Roboto, Arial, sans-serif; --bg:#fff9f0; --card:#ffffff; --accent:#ff8a65; --text:#333;}
+  body{zoom: 110%;margin:0;background:linear-gradient(180deg,#fffaf2,var(--bg));color:var(--text);display:flex;justify-content:center;padding:24px;}
+  .wrap{width:100%;max-width:740px;}
+  header{text-align:center;margin-bottom:18px;}
+  h1{margin:0;font-size:28px;}
+  .sub{margin:6px 0 0;color:#6b6b6b;font-size:14px;}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
+  button, .emoji-btn{cursor:pointer;border:0;border-radius:10px;padding:12px 16px;background:var(--accent);color:white;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
+  button.secondary{background:#6c757d;}
+  .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+  .player-left{display:flex;align-items:center;gap:14px;}
+  .emoji{font-size:34px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#fff3ea;border:1px solid #ffe1cf;}
+  .name{font-size:20px;font-weight:600;}
+  .small{font-size:13px;color:#666;margin-top:4px;}
+  .controls-area{background:rgba(255,255,255,0.8);padding:14px;border-radius:12px;margin-bottom:14px;}
+  .form-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  input[type="text"]{padding:12px;font-size:18px;border-radius:10px;border:1px solid #e6e6e6;flex:1;min-width:160px;}
+  .emoji-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .emoji-btn{background:#fff;border:1px solid #eee;color:#222;padding:10px 12px;font-size:20px;border-radius:10px;}
+  .emoji-btn.selected{outline:3px solid #ffd2c6;}
+  .delete-btn{background:#f44336;}
+  .tiny{font-size:13px;padding:8px 10px;border-radius:8px;}
+  @media (max-width:420px){h1{font-size:22px}.emoji{width:48px;height:48px;font-size:28px}.name{font-size:18px}}
+</style>
+</head>
+<body>
+  <div class="wrap" role="main">
+    <header>
+      <h1>Joly</h1>
+      <div class="sub">Lustig, einfach, spannend</div>
+    </header>
+    <br>
+
+    <div class="bar">
+      <button id="showAddBtn">Neuer Spieler anlegen</button>
+      <button id="clearStorageBtn" class="secondary">Gespeicherten Stand löschen</button>
+      <div style="align-self:center;color:#666;font-size:13px;">(Änderungen werden automatisch gespeichert)</div>
+    </div>
+
+    <div id="addArea" class="controls-area" style="display:none;">
+      <div style="font-weight:600;margin-bottom:8px;">SpielerIn anlegen</div>
+      <div class="form-row">
+        <input id="nameInput" type="text" placeholder="Name eingeben (z. B. Maria)" aria-label="Name" />
+        <button id="addBtn">Hinzufügen</button>
+      </div>
+      <div class="small">Charakter wählen</div>
+      <div id="emojiPicker" class="emoji-picker" aria-label="Emoji Auswahl">
+        <!-- Charaktere -->
+        <button class="emoji-btn">🙂</button>
+        <button class="emoji-btn">😊</button>
+        <button class="emoji-btn">😄</button>
+        <button class="emoji-btn">😉</button>
+        <button class="emoji-btn">🥰</button>
+        <button class="emoji-btn">😘</button>
+        <button class="emoji-btn">🤗</button>
+        <button class="emoji-btn">😇</button>
+        <button class="emoji-btn">😎</button>
+        <button class="emoji-btn">😂</button>
+        <button class="emoji-btn">👴</button>
+        <button class="emoji-btn">🧓</button>
+        <button class="emoji-btn">👵</button>
+        <button class="emoji-btn">🌸</button>
+        <button class="emoji-btn">🍰</button>
+        <button class="emoji-btn">☕️</button>
+        <button class="emoji-btn">🍪</button>
+        <button class="emoji-btn">🍩</button>
+        <button class="emoji-btn">🍷</button>
+        <button class="emoji-btn">🐶</button>
+        <button class="emoji-btn">🐱</button>
+        <button class="emoji-btn">🐻</button>
+      </div>
+    </div>
+
+    <div id="playersList" style="margin-top:8px;"></div>
+
+    <div style="margin-top:10px;color:#666;font-size:13px;text-align:center;">
+      Tipp: Namen eingeben, Charakter auswählen, dann "Hinzufügen". Zum Löschen das rote Kreuz drücken.
+    </div>
+
+    <div style="text-align:center;margin-top:12px;">
+      <button id="pointsBtn">Punkte eintragen</button>
+    </div>
+
+  </div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'joly_players_v1';
+  let players = [];
+  let selectedEmoji = '🙂';
+
+  const el = id => document.getElementById(id);
+  const showAddBtn = el('showAddBtn');
+  const addArea = el('addArea');
+  const emojiPicker = el('emojiPicker');
+  const addBtn = el('addBtn');
+  const nameInput = el('nameInput');
+  const playersList = el('playersList');
+  const clearStorageBtn = el('clearStorageBtn');
+  const pointsBtn = el('pointsBtn');
+
+  function loadPlayers(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      players = raw ? JSON.parse(raw) : [];
+    }catch(e){ players = []; }
+  }
+  function savePlayers(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(players)); }catch(e){ alert('Speichern fehlgeschlagen'); }
+  }
+  function renderPlayers(){
+    playersList.innerHTML = '';
+    if(players.length === 0){
+      playersList.innerHTML = '<div class="card" style="justify-content:center;color:#777">Noch keine Spieler angelegt.</div>';
+      return;
+    }
+    players.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="player-left">
+          <div class="emoji" aria-hidden="true">${p.emoji}</div>
+          <div>
+            <div class="name">${escapeHtml(p.name)}</div>
+          </div>
+        </div>
+        <div>
+          <button class="delete-btn tiny" data-id="${p.id}">✖ Löschen</button>
+        </div>
+      `;
+      playersList.appendChild(card);
+    });
+    // attach delete handlers
+    Array.from(playersList.querySelectorAll('[data-id]')).forEach(btn=>{
+      btn.addEventListener('click', ()=> {
+        const id = btn.getAttribute('data-id');
+        if(confirm('Spieler wirklich löschen?')) {
+          players = players.filter(x=> x.id !== id);
+          savePlayers();
+          renderPlayers();
+        }
+      });
+    });
+  }
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // emoji picker
+  emojiPicker.addEventListener('click', e=>{
+    const btn = e.target.closest('.emoji-btn');
+    if(!btn) return;
+    // unselect others
+    Array.from(emojiPicker.querySelectorAll('.emoji-btn')).forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedEmoji = btn.textContent.trim();
+    nameInput.focus();
+  });
+
+  // set initial selected emoji visually (if present)
+  (function initEmojiSelection(){
+    const buttons = Array.from(emojiPicker.querySelectorAll('.emoji-btn'));
+    const match = buttons.find(b => b.textContent.trim() === selectedEmoji);
+    if(match) match.classList.add('selected');
+    else if(buttons[0]) { buttons[0].classList.add('selected'); selectedEmoji = buttons[0].textContent.trim(); }
+  })();
+
+  // toggle add area
+  showAddBtn.addEventListener('click', ()=>{
+    addArea.style.display = addArea.style.display === 'none' ? 'block' : 'none';
+    if(addArea.style.display === 'block') nameInput.focus();
+  });
+
+  // add player
+  addBtn.addEventListener('click', ()=> {
+    const name = nameInput.value.trim();
+    if(!name){ alert('Bitte Namen eingeben.'); nameInput.focus(); return; }
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    players.push({ name, emoji: selectedEmoji, id });
+    savePlayers();
+    renderPlayers();
+    nameInput.value = '';
+    nameInput.focus();
+  });
+
+  // allow Enter key in name input to add
+  nameInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') { addBtn.click(); }
+  });
+
+  // clear all players
+  clearStorageBtn.addEventListener('click', () => {
+    if(confirm('Möchten Sie wirklich alle Spieler löschen?')) {
+      players = [];
+      localStorage.removeItem(STORAGE_KEY);
+      renderPlayers();
+    }
+  });
+
+  // points button: navigate to points.html, optional check
+  pointsBtn.addEventListener('click', () => {
+    if (players.length === 0) {
+      if (!confirm('Keine Spieler vorhanden. Trotzdem zur Punkte-Seite wechseln?')) return;
+    }
+    location.href = 'points.html';
+  });
+
+  // initial load
+  loadPlayers();
+  renderPlayers();
+})();
+</script>
+</body>
+</html>
